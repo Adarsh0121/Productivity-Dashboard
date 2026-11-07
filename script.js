@@ -228,7 +228,7 @@ function weatherFunctionality() {
 
     header2Temp.innerHTML = `${data.current.temperature_2m}°C`;
     header2Condition.innerHTML = weatherText(data.current.weather_code);
-    precipitation.innerHTML = `Heat Index: ${data.current.heatindex_c}°C`;
+    precipitation.innerHTML = `Feels like: ${data.current.apparent_temperature}°C`;
     humidity.innerHTML = `Humidity: ${data.current.relative_humidity_2m}%`;
     wind.innerHTML = `Wind: ${data.current.wind_speed_10m} km/h`;
   }
@@ -271,9 +271,9 @@ function weatherFunctionality() {
     header1Date.innerHTML = `${tarik} ${month}, ${year}`;
 
     if (hours > 12) {
-      header1Time.innerHTML = `${dayOfWeek}, ${String(hours - 12).padStart("2", "0")}:${String(minutes).padStart("2", "0")}:${String(seconds).padStart("2", "0")} pm`;
+      header1Time.innerHTML = `${dayOfWeek},${String(hours - 12).padStart("2", "0")}:${String(minutes).padStart("2", "0")}:${String(seconds).padStart("2", "0")} pm`;
     } else {
-      header1Time.innerHTML = `${dayOfWeek}, ${String(hours).padStart("2", "0")}:${String(minutes).padStart("2", "0")}:${String(seconds).padStart("2", "0")} am`;
+      header1Time.innerHTML = `${dayOfWeek},${String(hours).padStart("2", "0")}:${String(minutes).padStart("2", "0")}:${String(seconds).padStart("2", "0")} am`;
     }
   }
   setInterval(() => {
