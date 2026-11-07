@@ -198,9 +198,86 @@ function pomodoroTimer() {
 pomodoroTimer();
 
 //---------------------WEATHER FUNCTIONALITY---------------------
+        //purana code jisme api key likhi jai hai 
+// function weatherFunctionality() {
+//   var apiKey = "8ea4931c9e524d488ec191428260111";
+//   var city = "Muzaffarnagar";
+
+//   var header1Time = document.querySelector(".header1 h1");
+//   var header1Date = document.querySelector(".header1 h2");
+//   var header2Temp = document.querySelector(".header2 h2");
+//   var header2Condition = document.querySelector(".header2 h4");
+//   var precipitation = document.querySelector(".header2 .precipitation");
+//   var humidity = document.querySelector(".header2 .humidity");
+//   var wind = document.querySelector(".header2 .wind");
+
+//   var data = null;
+
+//   async function weatherAPICall() {
+//     var response = await fetch(
+//       `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}`,
+//     );
+//     data = await response.json();
+
+//     header2Temp.innerHTML = `${data.current.temp_c}°C`;
+//     header2Condition.innerHTML = `${data.current.condition.text}`;
+//     precipitation.innerHTML = `Heat Index:${data.current.heatindex_c}%`;
+//     humidity.innerHTML = `Humidity: ${data.current.humidity}%`;
+//     wind.innerHTML = `Wind: ${data.current.wind_kph} km/h`;
+//   }
+//   weatherAPICall();
+
+//   function timeDate() {
+//     let totalDaysOfWeek = [
+//       "Sunday",
+//       "Monday",
+//       "tuesday",
+//       "Wednesday",
+//       "Thursday",
+//       "Friday",
+//       "Saturday",
+//     ];
+//     let totalMonths = [
+//       "January",
+//       "February",
+//       "March",
+//       "April",
+//       "May",
+//       "June",
+//       "July",
+//       "August",
+//       "September",
+//       "October",
+//       "November",
+//       "December",
+//     ];
+
+//     var date = new Date();
+//     var dayOfWeek = totalDaysOfWeek[date.getDay()];
+//     var hours = date.getHours();
+//     var minutes = date.getMinutes();
+//     var seconds = date.getSeconds();
+//     var tarik = date.getDate();
+//     var month = totalMonths[date.getMonth()];
+//     var year = date.getFullYear();
+
+//     header1Date.innerHTML = `${tarik} ${month}, ${year}`;
+
+//     if (hours > 12) {
+//       header1Time.innerHTML = `${dayOfWeek},${String(hours - 12).padStart("2", "0")}:${String(minutes).padStart("2", "0")}:${String(seconds).padStart("2", "0")} pm`;
+//     } else {
+//       header1Time.innerHTML = `${dayOfWeek},${String(hours).padStart("2", "0")}:${String(minutes).padStart("2", "0")}:${String(seconds).padStart("2", "0")} am`;
+//     }
+//   }
+//   setInterval(() => {
+//     timeDate();
+//   }, 1000);
+// }
+// weatherFunctionality();
+        // naya code jisme api kai bina kaam hojagta hai
 function weatherFunctionality() {
-  var apiKey = "8ea4931c9e524d488ec191428260111";
-  var city = "Muzaffarnagar";
+  var latitude = 29.47;
+  var longitude = 77.70;
 
   var header1Time = document.querySelector(".header1 h1");
   var header1Date = document.querySelector(".header1 h2");
@@ -210,19 +287,27 @@ function weatherFunctionality() {
   var humidity = document.querySelector(".header2 .humidity");
   var wind = document.querySelector(".header2 .wind");
 
-  var data = null;
+  function weatherText(code) {
+    if (code === 0) return "Clear";
+    if (code <= 3) return "Cloudy";
+    if (code <= 48) return "Fog";
+    if (code <= 67) return "Rain";
+    if (code <= 77) return "Snow";
+    if (code <= 82) return "Showers";
+    return "Thunderstorm";
+  }
 
   async function weatherAPICall() {
     var response = await fetch(
-      `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}`,
+      `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,apparent_temperature,relative_humidity_2m,wind_speed_10m,weather_code`,
     );
-    data = await response.json();
+    var data = await response.json();
 
-    header2Temp.innerHTML = `${data.current.temp_c}°C`;
-    header2Condition.innerHTML = `${data.current.condition.text}`;
-    precipitation.innerHTML = `Heat Index:${data.current.heatindex_c}%`;
-humidity.innerHTML = `Humidity: ${data.current.humidity}%`;
-    wind.innerHTML = `Wind: ${data.current.wind_kph} km/h`;
+    header2Temp.innerHTML = `${data.current.temperature_2m}°C`;
+    header2Condition.innerHTML = weatherText(data.current.weather_code);
+    precipitation.innerHTML = `Feels like: ${data.current.apparent_temperature}°C`;
+    humidity.innerHTML = `Humidity: ${data.current.relative_humidity_2m}%`;
+    wind.innerHTML = `Wind: ${data.current.wind_speed_10m} km/h`;
   }
   weatherAPICall();
 
@@ -230,7 +315,7 @@ humidity.innerHTML = `Humidity: ${data.current.humidity}%`;
     let totalDaysOfWeek = [
       "Sunday",
       "Monday",
-      "tuesday",
+      "Tuesday",
       "Wednesday",
       "Thursday",
       "Friday",
@@ -262,10 +347,10 @@ humidity.innerHTML = `Humidity: ${data.current.humidity}%`;
 
     header1Date.innerHTML = `${tarik} ${month}, ${year}`;
 
-    if (hours > 12) {
-      header1Time.innerHTML = `${dayOfWeek},${String(hours - 12).padStart("2", "0")}:${String(minutes).padStart("2", "0")}:${String(seconds).padStart("2", "0")} pm`;
+    if (hours >= 12) {
+      header1Time.innerHTML = `${dayOfWeek}, ${String(hours % 12 || 12).padStart("2", "0")}:${String(minutes).padStart("2", "0")}:${String(seconds).padStart("2", "0")} pm`;
     } else {
-      header1Time.innerHTML = `${dayOfWeek},${String(hours).padStart("2", "0")}:${String(minutes).padStart("2", "0")}:${String(seconds).padStart("2", "0")} am`;
+      header1Time.innerHTML = `${dayOfWeek}, ${String(hours || 12).padStart("2", "0")}:${String(minutes).padStart("2", "0")}:${String(seconds).padStart("2", "0")} am`;
     }
   }
   setInterval(() => {
