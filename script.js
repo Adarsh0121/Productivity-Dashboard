@@ -199,8 +199,8 @@ pomodoroTimer();
 
 //---------------------WEATHER FUNCTIONALITY---------------------
 function weatherFunctionality() {
-  var apiKey = "8ea4931c9e524d488ec191428260111";
-  var city = "Muzaffarnagar";
+  var latitude = 29.47;
+  var longitude = 77.70;
 
   var header1Time = document.querySelector(".header1 h1");
   var header1Date = document.querySelector(".header1 h2");
@@ -210,19 +210,27 @@ function weatherFunctionality() {
   var humidity = document.querySelector(".header2 .humidity");
   var wind = document.querySelector(".header2 .wind");
 
-  var data = null;
+  function weatherText(code) {
+    if (code === 0) return "Clear";
+    if (code <= 3) return "Cloudy";
+    if (code <= 48) return "Fog";
+    if (code <= 67) return "Rain";
+    if (code <= 77) return "Snow";
+    if (code <= 82) return "Showers";
+    return "Thunderstorm";
+  }
 
   async function weatherAPICall() {
     var response = await fetch(
-      `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}`,
+      `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,apparent_temperature,relative_humidity_2m,wind_speed_10m,weather_code`,
     );
-    data = await response.json();
+    var data = await response.json();
 
-    header2Temp.innerHTML = `${data.current.temp_c}°C`;
-    header2Condition.innerHTML = `${data.current.condition.text}`;
-    precipitation.innerHTML = `Heat Index:${data.current.heatindex_c}%`;
-humidity.innerHTML = `Humidity: ${data.current.humidity}%`;
-    wind.innerHTML = `Wind: ${data.current.wind_kph} km/h`;
+    header2Temp.innerHTML = `${data.current.temperature_2m}°C`;
+    header2Condition.innerHTML = weatherText(data.current.weather_code);
+    precipitation.innerHTML = `Feels like: ${data.current.apparent_temperature}°C`;
+    humidity.innerHTML = `Humidity: ${data.current.relative_humidity_2m}%`;
+    wind.innerHTML = `Wind: ${data.current.wind_speed_10m} km/h`;
   }
   weatherAPICall();
 
