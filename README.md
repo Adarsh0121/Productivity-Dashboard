@@ -31,3 +31,6 @@ Features:
 🎨 Dynamic Themes -
 - Multiple UI themes
 - Smooth theme switching
+
+## 🔗 Live Demo
+👉 [https://adarsh0121.github.io/Productivity-Dashboard/]
